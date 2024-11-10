@@ -18,7 +18,7 @@ Output: 3
 Soln:
 
 Time complexity : O(N) + O(V+2E)    O(N) -> for outer loop , O(V+2E)  DFS traversal  {  V for node ,  2E for each node may have least of 2 connected nodes }
-Space complexity : O(N)+O(N)
+Space complexity : O(N)+O(N)+O(N)
 
 
 class Solution {
