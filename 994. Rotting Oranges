@@ -12,7 +12,7 @@ Return the minimum number of minutes that must elapse until no cell has a fresh 
 Soln:
 
 Time complexity :  O(NxNx4)  at the worst case every index is used to 4 directions
-Space comeplexity :   O(N)+O(N)
+Space comeplexity :   O(N)xO(N) at the worst case if all oranges are rotten we end up pushing everything into queue
 
 
 class Solution {
