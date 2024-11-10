@@ -1,0 +1,75 @@
+You are given an m x n grid where each cell can have one of three values:
+
+0 representing an empty cell,
+1 representing a fresh orange, or
+2 representing a rotten orange.
+Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+
+ 
+
+Soln:
+
+Time complexity :  O(NxNx4)  at the worst case every index is used to 4 directions
+Space comeplexity :   O(N)+O(N)
+
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+         
+         //  we have to  get the total
+
+         queue<pair<int,int>> rotten;
+          int row=grid.size(),col=grid[0].size();
+          int cnt=0;
+         for(int i=0;i<row;i++)
+         {
+            for(int j=0;j<col;j++)
+            {
+                if(grid[i][j]!=0) cnt++;
+                 if(grid[i][j]==2)
+                   rotten.push({i,j});
+            }
+         }
+
+
+         //we have to move all the 4 directions
+         int nrow[]={-1,0,1,0};
+         int ncol[]={0,-1,0,1};
+        int days=0;
+        int entry=0;
+         while(!rotten.empty()){
+            int s=rotten.size();
+           entry+=s;
+          
+             while(s--){
+            int x=rotten.front().first;
+            int y=rotten.front().second;
+            rotten.pop();
+           // days++;
+            
+           for(int i=0;i<4;i++)
+           {
+               int xi=x+nrow[i];
+               int yi=y+ncol[i];
+
+                if(xi>=0 && xi<row && yi>=0 && yi<col && grid[xi][yi]==1)
+                {
+                     rotten.push({xi,yi});
+                     grid[xi][yi]=2;
+                }
+           }
+           
+         }
+            //it is becoz of the last rotten days are added in the queue  for any rotten 
+              //  dry run for no fresh is present and one fresh is present you will get 
+         if(!rotten.empty())  days++;
+         }
+         if(entry==cnt)  return days;
+         return -1;
+
+
+    }
+};
