@@ -1,0 +1,73 @@
+Given an undirected graph with V vertices labelled from 0 to V-1 and E edges,
+check whether the graph contains any cycle or not. The Graph is represented as an adjacency list, where adj[i] 
+contains all the vertices that are directly connected to vertex i.
+
+NOTE: The adjacency list represents undirected edges, meaning that if there is an edge between vertex i and vertex j, 
+both j will be adj[i] and i will be in adj[j].
+
+Examples:
+
+Input: adj = [[1], [0,2,4], [1,3], [2,4], [1,3]] 
+Output: 1
+Explanation: 
+1->2->3->4->1 is a cycle.
+
+SOln:
+
+Time complexity :   o(N)+O(N+2E)
+Space complexity : O(N)+O(N)
+
+class Solution {
+    
+    private:
+    bool bfs(vector<vector<int>>& adj,int source,int parent,int vis[],queue<pair<int,int>>&DS)
+    {
+        vis[source]=1;
+        
+        while(!DS.empty())
+        {
+            int size=DS.size();
+            
+           
+                int first=DS.front().first;
+                int second=DS.front().second;
+               
+                
+                DS.pop();
+                
+                for(auto it: adj[first])
+                {
+                    if(!vis[it])
+                    {
+                         vis[it]=1;
+                        DS.push({it,first});
+                    }
+                    else if(it!=second)
+                      return true;
+                }
+            
+        }
+        return false;
+    }
+    public:
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(vector<vector<int>>& adj) {
+        
+        queue<pair<int,int>>DS;
+        int N=adj.size();
+        int vis[N]={0};
+        
+        for(int i=0;i<N;i++)
+        {
+            if(!vis[i]){
+                
+                DS.push({i,-1});
+              if(bfs(adj,i,-1,vis,DS)==true){
+                return true;
+              }
+            }
+        }
+        return false;
+    }
+    
+};
