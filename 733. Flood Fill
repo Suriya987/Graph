@@ -1,0 +1,117 @@
+You are given an image represented by an m x n grid of integers image, where image[i][j]
+represents the pixel value of the image. You are also given three integers sr, sc, and color.
+Your task is to perform a flood fill on the image starting from the pixel image[sr][sc].
+
+To perform a flood fill:
+
+Begin with the starting pixel and change its color to color.
+Perform the same process for each pixel that is directly adjacent (pixels that share a side with the original pixel,
+either horizontally or vertically) and shares the same color as the starting pixel.
+Keep repeating this process by checking neighboring pixels of the updated pixels and modifying their color 
+if it matches the original color of the starting pixel.
+The process stops when there are no more adjacent pixels of the original color to update.
+Return the modified image after performing the flood fill.
+
+ 
+
+Example 1:
+
+Input: image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2
+
+Output: [[2,2,2],[2,2,0],[2,0,1]]
+
+Example 2:
+
+Input: image = [[0,0,0],[0,0,0]], sr = 0, sc = 0, color = 0
+
+Output: [[0,0,0],[0,0,0]]
+
+Soln:
+
+Time complexity : ~O(NxM)
+Space complexity : ~ O(NxM)
+
+class Solution {
+  /*  private:
+    void dfs(vector<vector<int>>&image,int sr,int sc,int target,int row,int col, vector<vector<int>>&res,int color)
+    {
+
+       // if(sr<0 || sc<0 || sr>=row || sc>=col || image[sr][sc]!=target )  return;
+        //break;
+       
+            res[sr][sc]=color;
+            
+    
+        // else if(res[sr][sc]==color)
+        //   return;
+        // else
+        //  {
+        //   res[sr][sc]=image[sr][sc];
+        //   return;
+        //  }
+
+       //dfs call
+         
+         //top
+            int nRow=sr-1,nCol=sc;
+         if(sr>=0 && sc>=0 && sr<row && sc<col){
+            dfs(image,sr-1,sc,target,row,col,res,color);
+         
+          //left
+         
+            dfs(image,sr,sc-1,target,row,col,res,color);
+        //right
+             dfs(image,sr+1,sc,target,row,col,res,color);
+             //bottom
+          
+             dfs(image,sr,sc+1,target,row,col,res,color);
+         }
+          
+    }*/
+
+    private:
+      void dfs(vector<vector<int>>&image,int sr,int sc,int target,int row,int col, vector<vector<int>>&res,int color,vector<int>&delRow,vector<int>&delCol)
+      {
+               res[sr][sc]=color;
+
+
+              for(int i=0;i<4;i++)
+              {
+                int nRow=sr+delRow[i];
+                int nCol=sc+delCol[i];
+
+                if(nRow>=0 && nRow<row && nCol>=0 && nCol<col && image[nRow][nCol]==target && res[nRow][nCol]!=color)
+                {
+                        dfs(image,nRow,nCol,target,row,col,res,color,delRow,delCol);
+            
+                        // dfs(image,sr,sc-1,target,row,col,res,color,delRow,delCol);
+            
+                        // dfs(image,sr+1,sc,target,row,col,res,color,delRow,delCol);
+                    
+                        // dfs(image,sr,sc+1,target,row,col,res,color,delRow,delCol);
+                }
+              }
+      }
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+         
+             int row=image.size();
+             int col=image[0].size();
+            int target=image[sr][sc];
+              vector<vector<int>>res(row,vector<int>(col,-1));
+            vector<int>delRow={-1,0,1,0};
+             vector<int>delCol={0,-1,0,1};
+
+          dfs(image,sr,sc,target,row,col,res,color,delRow,delCol);
+
+          for(int i=0;i<row;i++)
+          {
+            for(int j=0;j<col;j++)
+            {
+                if(res[i][j]==-1)
+                  res[i][j]=image[i][j];
+            }
+          }
+          return res;
+    }
+};
