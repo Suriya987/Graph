@@ -1,0 +1,89 @@
+Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+
+Example 1:
+
+
+Input: mat = [[0,0,0],[0,1,0],[0,0,0]]
+Output: [[0,0,0],[0,1,0],[0,0,0]]
+Example 2:
+
+
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+
+Soln:
+
+Time complexity : O(NxM)
+Space complexity : O(NxM)
+
+class Solution { 
+    public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+       
+          queue<pair<pair<int,int>,int>>qu;
+         int row=mat.size();
+         int col=mat[0].size();
+
+           vector<vector<int>>res(row,vector<int>(col,-1));
+ 
+  //we put it up in res;
+         for(int i=0;i<row;i++)
+         {
+            for(int j=0;j<col;j++)
+            {
+                  if(mat[i][j]==0)
+                  {
+                    res[i][j]=0;
+                    qu.push({{i,j},0});
+                  }
+            }
+         }
+ 
+         //we need to look for 4 directions  
+           int cnt=0;
+         while(!qu.empty())
+         {
+               
+             // int size=qu.size();
+ 
+            
+                    int ind1=qu.front().first.first;
+                    int ind2=qu.front().first.second;
+
+                    int levl=qu.front().second;
+
+                     qu.pop();
+                    //top
+                     if(ind1>0 && res[ind1-1][ind2]==-1)
+                      {
+                          res[ind1-1][ind2]=levl+1;
+                          qu.push({{ind1-1,ind2},levl+1});
+                      }
+                    //left
+                    if(ind2>0 && res[ind1][ind2-1]==-1)
+                    {
+                        res[ind1][ind2-1]=levl+1;
+                        qu.push({{ind1,ind2-1},levl+1});
+                    }
+
+                    //right
+                    if(ind2<col-1 && res[ind1][ind2+1]==-1)
+                    {
+                           res[ind1][ind2+1]=levl+1;
+                           qu.push({{ind1,ind2+1},levl+1});
+                    }
+
+                    //bottom
+                    if(ind1<row-1 && res[ind1+1][ind2]==-1)
+                    {
+                       res[ind1+1][ind2]=levl+1;
+                       qu.push({{ind1+1,ind2},levl+1});    
+                    }
+
+              
+         }
+         return res;
+    }
+};
