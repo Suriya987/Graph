@@ -1,0 +1,96 @@
+You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
+
+A move consists of walking from one land cell to another adjacent (4-directionally) land cell or walking
+off the boundary of the grid.
+
+Return the number of land cells in grid for which we cannot walk off the boundary of the grid in any number of moves.
+
+Ts 1:
+Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]
+Output: 3
+Explanation: There are three 1s that are enclosed by 0s, and one 1 that is not enclosed because its on the boundary.
+
+Ts 2:
+Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
+Output: 0
+Explanation: All 1s are either on the boundary or can reach the boundary.
+ 
+
+
+Soln:
+
+Time complexity : O(NxMx4) + O(N+M)  , So overall, O(NxM)
+Space complexity :  O(NxM)+O(NxM)
+
+class Solution {
+    private:
+    void dfs(int i,int j,vector<vector<int>>&grid,vector<vector<int>>&vis,int delrow[],int delcol[],vector<int>&cnt)
+    {
+        vis[i][j]=1;
+         cnt[0]++;
+        /*
+        {-1,0,0,1 };
+         0,-1,1,0 };
+          */
+    
+        for(int k=0;k<4;k++)
+        {
+            int nRow=i+delrow[k];
+            int nCol=j+delcol[k];
+            if(nRow>=0 && nRow<grid.size() && nCol>=0 && 
+            nCol<grid[0].size() && grid[nRow][nCol]==1 && vis[nRow][nCol]==0)
+            {
+                 dfs(nRow,nCol,grid,vis,delrow,delcol,cnt);
+            }
+        }  
+      
+    }
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        vector<int>cnt(2,0);
+        int n=grid.size();
+        int m=grid[0].size();
+         vector<vector<int>>vis(n,vector<int>(m,0)); 
+         int LandCells=0;
+          int delrow[]={-1,0,0,1 };
+          int delcol[]={0,-1,1,0 };
+         //1st col and last col
+         for(int i=0;i<m;i++)
+         {
+            if(grid[0][i]==1 && vis[0][i]==0)
+              dfs(0,i,grid,vis,delrow,delcol,cnt);
+            if(grid[n-1][i]==1 && vis[n-1][i]==0)
+             dfs(n-1,i,grid,vis,delrow,delcol,cnt);
+         }
+
+        // 1st row and last row
+        for(int j=0;j<n;j++)
+        {
+             if(grid[j][0]==1 && vis[j][0]==0 )
+             dfs(j,0,grid,vis,delrow,delcol,cnt);
+
+            // if(n-1<m){
+              
+             if(grid[j][m-1]==1 && vis[j][m-1]==0 )
+             dfs(j,m-1,grid,vis,delrow,delcol,cnt);
+           //  }
+        }
+
+        //check what are the indexes are visited and not visited having 1 return the count
+        int vist=0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(vis[i][j]==0  && grid[i][j]==1)
+                  LandCells++;
+                if(vis[i][j]==1)
+                  cout<<" " << i <<" " <<j;
+            }
+            cout<<endl;
+        }
+
+        
+        return LandCells;
+    }
+};
