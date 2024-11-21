@@ -1,0 +1,101 @@
+A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
+
+Every adjacent pair of words differs by a single letter.
+Every si for 1 <= i <= k is in wordList. Note that beginWord does not need to be in wordList.
+sk == endWord
+Given two words, beginWord and endWord, and a dictionary wordList, 
+return all the shortest transformation sequences from beginWord to endWord, or an empty list 
+if no such sequence exists. Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
+
+ 
+
+Example 1:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+Output: [["hit","hot","dot","dog","cog"],["hit","hot","lot","log","cog"]]
+Explanation: There are 2 shortest transformation sequences:
+"hit" -> "hot" -> "dot" -> "dog" -> "cog"
+"hit" -> "hot" -> "lot" -> "log" -> "cog"
+Example 2:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
+Output: []
+Explanation: The endWord "cog" is not in wordList, therefore there is no valid transformation sequence.
+ 
+
+soln:
+
+Time complexity: Depends on the test case
+Space complexity :  depends on the test cases
+
+class Solution {
+public:
+    vector<vector<string>> findSequences(string beginWord, string endWord, vector<string>& wordList) {
+          queue<vector<string>>q;
+              unordered_set<string>set(wordList.begin(),wordList.end());
+              vector<vector<string>>res;
+              q.push({beginWord});
+              int level=0;
+              vector<string>vis;
+              vis.push_back(beginWord);
+
+            while(!q.empty())
+            {
+                vector<string>curr=q.front();
+                q.pop();
+                 
+                  if(curr.size()>level)
+                  {
+                       level++;
+                       for (auto it : vis)
+                        {
+                            set.erase(it);
+                        }
+                  }
+
+                  
+
+                //look for  any string is there with 1 adjacent diff
+              //  int size=curr.size();
+                string lastWord= curr.back();
+
+                if(lastWord==endWord)
+                 {
+                       if (res.size() == 0)
+                        {
+                            res.push_back(curr);
+                            
+                        }
+                        else if (res[0].size() == curr.size())
+                        {
+                            
+                            res.push_back(curr);
+                            
+                        }
+                 }
+               
+              for(int i=0;i<lastWord.size();i++)
+              {
+                  char orgnal=lastWord[i];
+                  
+                for(char st='a';st<='z';st++)
+                {
+                     lastWord[i]=st;
+                     //checking whether the string is present in set or not 
+                     if(set.count(lastWord)>0)
+                     {
+                        vis.push_back(lastWord);
+                        curr.push_back(lastWord);
+                        q.push(curr);   //--> pushing into the q once  i fount new one
+                        curr.pop_back();  //-> have to pop back for finding new sequences
+                     }
+                }
+                lastWord[i]=orgnal;   // getting back to the orgnal state
+              }
+                
+            }
+
+            return res;
+
+    }
+};
