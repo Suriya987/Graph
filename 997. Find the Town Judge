@@ -1,0 +1,69 @@
+In a town, there are n people labeled from 1 to n. There is a rumor that one of these people is secretly the town judge.
+
+If the town judge exists, then:
+
+The town judge trusts nobody.
+Everybody (except for the town judge) trusts the town judge.
+There is exactly one person that satisfies properties 1 and 2.
+You are given an array trust where trust[i] = [ai, bi] representing that the person labeled ai trusts the person labeled bi. 
+If a trust relationship does not exist in trust array, then such a trust relationship does not exist.
+
+Return the label of the town judge if the town judge exists and can be identified, or return -1 otherwise.
+
+Example 1:
+
+Input: n = 2, trust = [[1,2]]
+Output: 2
+Example 2:
+
+Input: n = 3, trust = [[1,3],[2,3]]
+Output: 3
+Example 3:
+
+Input: n = 3, trust = [[1,3],[2,3],[3,1]]
+Output: -1
+
+
+
+Time complexity : O(size of trust) + O(N)  ~O(N)
+Space complexity : O(N)
+
+
+
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        // int len=trust.size();//finding the length of the matrix
+        // int trustablePerson=trust[0][1];
+        // for(int i=1;i<len;i++)
+        // {
+        //     if(trust[i][1]==trustablePerson)
+        //     continue;
+
+        //     return -1;
+        // }
+
+        // return trustablePerson;
+
+if(trust.size()==0)
+return n==1?n:-1;
+
+        vector<int>count(n+1,0);//becoz if we dont give n+1 then this 0 1 we cant add 2 which will be the out of bound
+        for(auto &tr : trust)
+        {
+            cout<<tr[0]<<" ";
+           count[tr[0]]--;//trusts someone so this cant be a judge
+         cout<<tr[1]<<" ";
+           count[tr[1]]++;
+        }
+
+         int n1=count.size();
+         for(int i=0;i<n1;i++)
+         {
+             if(count[i]==n-1)
+             return i;
+         }
+
+         return -1;
+    }
+};
