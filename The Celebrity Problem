@@ -1,0 +1,33 @@
+Time complexity : O(N^2)
+space complexity : O(Size of the row )
+
+class Solution {
+  public:
+    int celebrity(vector<vector<int>>& mat) {
+        // code here
+         int n=mat.size();
+          vector<int>count(n+1,0);
+          
+          int m=mat[0].size();
+          
+          for(int i=0;i<n;i++)
+          {
+              for(int j=0;j<m;j++)
+              {
+                 if(mat[i][j]==1 && i!=j)
+                 {
+                   count[i]--;
+                   count[j]++;
+                 }
+              }
+          }
+          
+          for(int i=0;i<count.size();i++)
+          {
+              if(count[i]==n-1)
+              return i;
+          }
+          
+          return -1;
+    }
+};
